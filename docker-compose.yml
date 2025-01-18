@@ -1,0 +1,35 @@
+version: '3.8'
+
+networks:
+  network:
+   driver: bridge
+
+volumes:
+  postgres_data:
+
+services:
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - "443:443"
+      - "80:80"
+    networks:
+      - network
+    depends_on:
+      - react
+
+  react:
+    build: 
+        context: ./merriage
+        dockerfile: Dockerfile
+    ports:
+        - '5173:5173'
+    stdin_open: true
+    tty: true
+    networks:
+      - network
